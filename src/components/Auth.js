@@ -3,6 +3,7 @@ import "./Auth.css"
 import { auth, googleProvider } from "../config/firebase"
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut
 } from "firebase/auth";
@@ -18,6 +19,16 @@ export const Auth = ({ getMovieList }) => {
     //e.preventDefault()
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      getMovieList();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const Login = async () => {
+    //e.preventDefault()
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       getMovieList();
     } catch (err) {
       console.log(err);
@@ -46,18 +57,32 @@ export const Auth = ({ getMovieList }) => {
   return (
     <div>
       <div className="input-container">
+        <h1>Create Account</h1>
         <form className="email">
           <input placeholder="Email..." onChange={(e) => setEmail(e.target.value)} />
         </form>
         <form className="password">
           <input type="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
         </form>
+        <button onClick={signIn}>Sign In</button>
+      </div>
+
+
+      <div className='login-form'>
+        <h1>Log In</h1>
+        <form className="email">
+          <input placeholder="Email for Login" onChange={(e) => setEmail(e.target.value)} />
+        </form>
+        <form className="password">
+          <input type="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
+        </form>
+        <button onClick={Login}>Login In</button>
+        <GoogleButton onClick={signInWithGoogle} />
       </div>
 
       <div className="btns">
-        <button onClick={signIn}>Sign In</button>
         <button onClick={logOut}>LogOut</button>
-        <GoogleButton onClick={signInWithGoogle} />
+
       </div>
     </div>
   )
